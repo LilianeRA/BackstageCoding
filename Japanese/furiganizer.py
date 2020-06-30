@@ -120,5 +120,4 @@ if __name__ == '__main__':
 	organizeFuriganizedText(infilepath, outfilepath)
 	htmlFuriganizer(outfilepath, htmlfilepath)
 	
-	
 	print('Done.')
