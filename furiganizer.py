@@ -1,9 +1,12 @@
 from __future__ import print_function
 import os, sys
 import regex as re # regular expression
+
 '''
-1 To write furigana in here I used the HTML command:<ruby>漢字<rt>かんじ</rt></ruby>. But it was too hard to do it on the code editor. So I made a Python script to write it for me.  
+More info at:
+https://backstagecoding.blogspot.com/p/adding-furigana-on-blogger.html
 '''
+
 def insertKanjiFurigana(kanji, furigana):
 	return '<ruby>'+kanji+'<rt>'+furigana+'</rt></ruby>'
 
@@ -11,7 +14,8 @@ def readAllLines(filepath):
 	file_ = open(filepath, 'r')
 	data  = file_.read()
 	lines = data.split("\n")
-	lines = lines[0:len(lines)-1] # removendo string vazia da ultima linha
+	if  lines[len(lines)-1] == '':
+		lines = lines[0:len(lines)-1] # removing empty string of the last line
 	file_.close()
 	return lines
 
@@ -69,11 +73,13 @@ def organizeFuriganizedText(inputfilepath, outputfilepath):
 	# then its furigana is written before it whe using furiganizer.com.
 	# So the first word of the input file is never a kanji.
 	for l in range(0,len(lines)-1):
-		# if the next word is a kanji, then the current one is a furigana that will be appnded later.
+		# if the next word is a kanji, then the current one 
+		# is a furigana that will be appnded later.
 		# Son, continue to the next word.
 		line = lines[l+1]
 		lineKanji = patternKanji.sub(r'{\1}^', line)
 		if '^' in lineKanji:
+			#print(lineKanji)
 			continue
 			
 		line = lines[l]
@@ -102,7 +108,7 @@ def organizeFuriganizedText(inputfilepath, outputfilepath):
 	
 	
 if __name__ == '__main__':
-	infilename = 'japaneseText2'
+	infilename = 'japaneseText'
 	infilepath = os.path.join(os.getcwd(), infilename+'.txt')
 	if os.path.exists(infilepath) == False:
 		print('Error: path not found. Aborting.')
